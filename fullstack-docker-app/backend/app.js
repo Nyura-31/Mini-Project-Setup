@@ -1,30 +1,30 @@
-const express = require('express');
-const { Client } = require('pg');
-const app = express();
-const port = 5000;
+const express = require("express");
+const { Pool } = require("pg");
+require("dotenv").config();
 
-const dbClient = new Client({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'testdb',
+const app = express();
+
+// Setup Postgres connection pool
+const pool = new Pool({
+  host: process.env.DB_HOST || "db",
+  user: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "postgres",
+  database: process.env.DB_NAME || "postgres",
   port: process.env.DB_PORT || 5432,
 });
 
-dbClient.connect()
-  .then(() => console.log('Connected to Postgres'))
-  .catch((err) => console.error('Failed to connect to Postgres', err));
+// Test DB connection
+pool.connect()
+  .then(() => console.log("✅ Connected to Postgres"))
+  .catch((err) => console.error("❌ DB connection error:", err));
 
-app.get('/api', async (req, res) => {
-  try {
-    const result = await dbClient.query('SELECT NOW() AS time');
-    res.send(`Hello from Express + Postgres! Server time: ${result.rows[0].time}`);
-  } catch (err) {
-    console.error('DB query error:', err);
-    res.status(500).send('Database error');
-  }
+// API route
+app.get("/api", (req, res) => {
+  res.send("Hello from Backend + Postgres 🚀");
 });
 
-app.listen(port, () => {
-  console.log(`Backend listening at http://localhost:${port}`);
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
