@@ -65,4 +65,5 @@ Mention `.env` file (currently empty, but can later hold DB credentials, etc.).
 * Dockerize frontend & backend fully
 * Deploy on cloud (Heroku/Render/DigitalOcean)
 
+
 ---
