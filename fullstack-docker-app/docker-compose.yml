@@ -1,4 +1,4 @@
-version: "3.9"
+
 
 services:
   db:
@@ -13,22 +13,21 @@ services:
   backend:
     build: ./backend
     environment:
-      DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_PORT: ${DB_PORT}
-    ports:
-      - "5000:5000"
+      DB_HOST: db
+      DB_PORT: 5432
     depends_on:
       - db
 
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:3000"
     depends_on:
       - backend
 
+    init: true
 volumes:
   db-data:
